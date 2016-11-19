@@ -11,15 +11,16 @@
 
 package com.commonsware.cwac.netsecurity.test.pub.okhttp3;
 
-import android.support.test.InstrumentationRegistry;
 import com.commonsware.cwac.netsecurity.TrustManagerBuilder;
-import com.commonsware.cwac.netsecurity.test.R;
 
-public class SelfSignedSystemTest extends SimpleHTTPSTest {
+public class DefaultAndDefaultAndDenyTest extends SimpleHTTPSTest {
   @Override
   protected TrustManagerBuilder getBuilder() throws Exception {
-    return(new TrustManagerBuilder()
-      .withConfig(InstrumentationRegistry.getContext(),
-        R.xml.okhttp3_selfsigned_system, false));
+    return(new TrustManagerBuilder().useDefault().and().denyAll());
+  }
+
+  @Override
+  protected boolean isPositiveTest() {
+    return(false);
   }
 }

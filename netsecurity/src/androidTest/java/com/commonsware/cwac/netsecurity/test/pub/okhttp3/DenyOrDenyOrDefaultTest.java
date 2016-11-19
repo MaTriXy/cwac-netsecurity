@@ -11,15 +11,26 @@
 
 package com.commonsware.cwac.netsecurity.test.pub.okhttp3;
 
-import android.support.test.InstrumentationRegistry;
+import android.os.Build;
 import com.commonsware.cwac.netsecurity.TrustManagerBuilder;
-import com.commonsware.cwac.netsecurity.test.R;
 
-public class SelfSignedSystemTest extends SimpleHTTPSTest {
+public class DenyOrDenyOrDefaultTest extends SimpleHTTPSTest {
   @Override
   protected TrustManagerBuilder getBuilder() throws Exception {
     return(new TrustManagerBuilder()
-      .withConfig(InstrumentationRegistry.getContext(),
-        R.xml.okhttp3_selfsigned_system, false));
+      .denyAll()
+      .denyAll()
+      .or()
+      .denyAll()
+      .denyAll()
+      .or()
+      .useDefault());
+  }
+
+  // if <N, succeeds because we are not applying any rules
+  // if >=N, fails because manifest setting is for invalid CA
+  @Override
+  protected boolean isPositiveTest() {
+    return(Build.VERSION.SDK_INT<Build.VERSION_CODES.N);
   }
 }

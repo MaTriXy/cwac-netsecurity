@@ -15,11 +15,20 @@ import android.support.test.InstrumentationRegistry;
 import com.commonsware.cwac.netsecurity.TrustManagerBuilder;
 import com.commonsware.cwac.netsecurity.test.R;
 
-public class SelfSignedSystemTest extends SimpleHTTPSTest {
+public class OrAndTest extends SimpleHTTPSTest {
   @Override
   protected TrustManagerBuilder getBuilder() throws Exception {
     return(new TrustManagerBuilder()
       .withConfig(InstrumentationRegistry.getContext(),
-        R.xml.okhttp3_selfsigned_system, false));
+        R.xml.okhttp3_selfsigned_mismatch, false)
+      .or()
+      .useDefault()
+      .and()
+      .denyAll());
+  }
+
+  @Override
+  protected boolean isPositiveTest() {
+    return(false);
   }
 }

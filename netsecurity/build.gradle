@@ -2,14 +2,14 @@ apply plugin: 'com.android.library'
 
 dependencies {
     androidTestCompile 'com.android.support.test:rules:0.5'
-    compile 'com.android.support:support-annotations:24.0.0'
-    provided 'com.squareup.okhttp3:okhttp:3.4.0'
-    androidTestCompile 'com.squareup.okhttp3:okhttp:3.4.0'
+    compile 'com.android.support:support-annotations:24.2.0'
+    provided 'com.squareup.okhttp3:okhttp:3.4.1'
+    androidTestCompile 'com.squareup.okhttp3:okhttp:3.4.1'
 }
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         minSdkVersion 17
@@ -29,6 +29,21 @@ android {
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
+    // from http://stackoverflow.com/a/19484146/115145
+
+    android.libraryVariants.all { variant ->
+        def name = variant.buildType.name
+        if (name.equals(com.android.builder.core.BuilderConstants.DEBUG)) {
+            return; // Skip debug builds.
+        }
+        def task = project.tasks.create "jar${name.capitalize()}", Jar
+        task.dependsOn variant.javaCompile
+        task.from variant.javaCompile.destinationDir
+        task.baseName = "cwac-${PUBLISH_ARTIFACT_ID}"
+        task.version = PUBLISH_VERSION
+        task.exclude('com/commonsware/cwac/**/BuildConfig.**')
+    }
+
     // based on http://stackoverflow.com/a/23672732/115145
 
     android.libraryVariants.all { variant ->

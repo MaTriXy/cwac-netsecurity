@@ -16,7 +16,15 @@ import com.commonsware.cwac.netsecurity.TrustManagerBuilder;
 public class DefaultAndDenyTest extends SimpleHTTPSTest {
   @Override
   protected TrustManagerBuilder getBuilder() throws Exception {
-    return(new TrustManagerBuilder().useDefault().and().denyAll());
+    return(new TrustManagerBuilder()
+      .useDefault()
+      .useDefault()
+      .or()
+      .useDefault()
+      .useDefault()
+      .and()
+      .denyAll()
+      .denyAll());
   }
 
   @Override
