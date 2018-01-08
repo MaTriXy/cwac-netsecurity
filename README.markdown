@@ -14,10 +14,9 @@ configuration backport, particularly for
 [OkHttp3](https://github.com/square/okhttp)
 and `HttpURLConnection`.
 
-**NOTE**: If Google releases their own backport of network security
-configuration, please consider using it. Official backports are usually
-stronger candidates than are unofficial ones like the one contained
-in this library.
+This library also includes support for certificate memorization, where you
+can elect to trust certificates discovered "in the wild", either automatically
+or with user approval.
 
 ## Installation
 
@@ -33,13 +32,13 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:netsecurity:0.3.0'
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    implementation 'com.commonsware.cwac:netsecurity:0.4.5'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
 }
 ```
 
 If you are using this library with OkHttp3, you also need to have
-a `compile` statement for a compatible OkHttp3 artifact, as shown
+an `implementation` statement for a compatible OkHttp3 artifact, as shown
 above.
 
 If you are using `HttpURLConnection`, or tying this code into some
@@ -124,7 +123,8 @@ supported
 
 ## Advanced Usage
 
-If you want to do more sophisticated things with the network security
+If you want to employ certificate memorization or otherwise
+do more sophisticated things with the network security
 configuration backport and/or `TrustManagerBuilder`, there is a
 [separate page of documentation](https://github.com/commonsguy/cwac-netsecurity/blob/master/docs/ADVANCED_USAGE.markdown)
 for that.
@@ -172,9 +172,9 @@ module with the CRT file that matches your self-signed certificate that
 ## Dependencies
 
 `netsecurity` has a `provided` dependency on OkHttp3. This library
-should fairly closely track the latest OkHttp3 release. Version 0.3.0
+should fairly closely track the latest OkHttp3 release. Version 0.4.5
 of this library uses OkHttp version
-**3.5.0**. If you find
+**3.9.0**. If you find
 that the library has fallen behind, please
 [file an issue](https://github.com/commonsguy/cwac-netsecurity/issues)
 if one has not already been filed.
@@ -185,7 +185,7 @@ Otherwise, there are no external dependencies.
 
 ## Version
 
-The current version is **0.3.0**.
+The current version is **0.4.5**.
 
 ## Demo
 
@@ -196,6 +196,9 @@ in a `ListView`. Retrofit and Picasso use a common OkHttp3-defined
 ensure that connections to key hosts, such as the Stack Exchange
 Web service API, use SSL certificates from the expected certificate
 authorities.
+
+More details on how to use this "playground" app can be found
+[in the playground documentation](https://github.com/commonsguy/cwac-netsecurity/blob/master/docs/PLAYGROUND.markdown).
 
 ## License
 
@@ -231,6 +234,13 @@ Do not ask for help via social media.
 
 |Library Version|AOSP Code Base                                                                                          |Release Notes|
 |:-------------:|:------------------------------------------------------------------------------------------------------:|-------------|
+|v0.4.5         |Android 8.0 source code from the SDK, plus [the `android-7.1.0_r7` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.1.0_r7)|updated to OkHttp 3.9.0 and newer Android Plugin for Gradle, Gradle|
+|v0.4.4         |Android 7.1 source code from the SDK, plus [the `android-7.1.0_r7` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.1.0_r7)|updated to OkHttp 3.8.1 and fixed testing bug|
+|v0.4.3         |Android 7.1 source code from the SDK, plus [the `android-7.1.0_r7` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.1.0_r7)|updated to OkHttp 3.8.0 and new test SSL certificate|
+|v0.4.2         |Android 7.1 source code from the SDK, plus [the `android-7.1.0_r7` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.1.0_r7)|added single-item-chain filtering for memorization|
+|v0.4.1         |Android 7.1 source code from the SDK, plus [the `android-7.1.0_r7` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.1.0_r7)|switched to OkHttp 3.6.0, add domain filtering for memorization|
+|v0.4.0         |Android 7.1 source code from the SDK, plus [the `android-7.1.0_r7` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.1.0_r7)|added certificate memorization and NetCipher integration options|
+|v0.3.1         |Android 7.1 source code from the SDK, plus [the `android-7.1.0_r7` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.1.0_r7)|bug fix per [issue #7](https://github.com/commonsguy/cwac-netsecurity/issues/7)|
 |v0.3.0         |Android 7.1 source code from the SDK, plus [the `android-7.1.0_r7` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.1.0_r7)|`user` validation per [issue #5](https://github.com/commonsguy/cwac-netsecurity/issues/5)|
 |v0.2.1         |Android 7.1 source code from the SDK, plus [the `android-7.1.0_r7` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.1.0_r7)|bug fix per [issue #3](https://github.com/commonsguy/cwac-netsecurity/issues/3)|
 |v0.2.0         |Android 7.0 source code from the SDK, plus [the `android-7.0.0_r1` tagged edition of `conscrypt`](https://android.googlesource.com/platform/external/conscrypt/+/android-7.0.0_r1)|`HttpURLConnection` no longer requires `setHost()` call|
