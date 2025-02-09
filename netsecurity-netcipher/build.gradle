@@ -1,12 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion "26.0.2"
+  compileSdkVersion 28
 
   defaultConfig {
     minSdkVersion 17
-    targetSdkVersion 25
+    targetSdkVersion 28
     versionCode 1
     versionName "1.0"
   }
@@ -26,10 +25,10 @@ repositories {
 
 dependencies {
   debugApi project(":netsecurity")
-  releaseApi "com.commonsware.cwac:netsecurity:0.4.4"
+  releaseApi "com.commonsware.cwac:netsecurity:0.5.0"
   api "info.guardianproject.netcipher:netcipher:2.0.0-alpha1"
   api "info.guardianproject.netcipher:netcipher-okhttp3:2.0.0-alpha1"
-  api "com.squareup.okhttp3:okhttp:3.9.0"
+  api "com.squareup.okhttp3:okhttp:3.9.1"
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
@@ -46,23 +45,6 @@ if (project.hasProperty('PUBLISH_GROUP_ID')) {
     task.baseName = "cwac-netsecurity-netcipher"
     task.version = PUBLISH_VERSION
     task.exclude('com/commonsware/cwac/**/BuildConfig.**')
-  }
-
-  // based on http://stackoverflow.com/a/23672732/115145
-
-  android.libraryVariants.all { variant ->
-    task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
-      description "Generates Javadoc for $variant.name."
-      source = variant.javaCompile.source
-      ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-      classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
-      exclude '**/BuildConfig.java'
-      exclude '**/R.java'
-      exclude '**/config/*.java'
-      exclude '**/conscrypt/*.java'
-      exclude '**/internalutil/*.java'
-      exclude '**/luni/*.java'
-    }
   }
 
   task sourcesJar(type: Jar) {

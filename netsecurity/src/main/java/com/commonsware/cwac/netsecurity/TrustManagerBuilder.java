@@ -19,8 +19,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.XmlResourceParser;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.XmlRes;
 import android.util.Log;
 import com.commonsware.cwac.netsecurity.config.ApplicationConfig;
 import com.commonsware.cwac.netsecurity.config.ConfigSource;
@@ -93,14 +91,7 @@ public class TrustManagerBuilder {
    */
   public HttpURLConnection applyTo(HttpURLConnection c)
     throws NoSuchAlgorithmException, KeyManagementException {
-    if (c instanceof HttpsURLConnection && mgr.size()>0) {
-      SSLContext ssl=SSLContext.getInstance("TLS");
-      TrustManager[] trustManagers=buildArray();
-
-      ssl.init(null, trustManagers, null);
-      ((HttpsURLConnection)c).setSSLSocketFactory(ssl.getSocketFactory());
-      mgr.setHost(c.getURL().getHost());
-    }
+    mgr.applyTo(c);
 
     return(c);
   }
@@ -215,8 +206,8 @@ public class TrustManagerBuilder {
    * @param resourceId an R.xml value pointing to the configuration
    * @return the builder for chained calls
    */
-  public TrustManagerBuilder withConfig(@NonNull Context ctxt,
-                                        @XmlRes int resourceId) {
+  public TrustManagerBuilder withConfig(Context ctxt,
+                                        int resourceId) {
     validateConfig(ctxt, resourceId, false);
 
     return(withConfig(new XmlConfigSource(ctxt, resourceId, false)));
@@ -232,8 +223,8 @@ public class TrustManagerBuilder {
    *                     build, false otherwise
    * @return the builder for chained calls
    */
-  public TrustManagerBuilder withConfig(@NonNull Context ctxt,
-                                        @XmlRes int resourceId,
+  public TrustManagerBuilder withConfig(Context ctxt,
+                                        int resourceId,
                                         boolean isDebugBuild) {
     validateConfig(ctxt, resourceId, false);
 
@@ -248,7 +239,7 @@ public class TrustManagerBuilder {
    * @param ctxt any Context will work
    * @return the builder for chained calls
    */
-  public TrustManagerBuilder withManifestConfig(@NonNull Context ctxt) {
+  public TrustManagerBuilder withManifestConfig(Context ctxt) {
     if (Build.VERSION.SDK_INT<Build.VERSION_CODES.N) {
       ApplicationInfo info=null;
 
@@ -280,7 +271,7 @@ public class TrustManagerBuilder {
     return(this);
   }
 
-  TrustManagerBuilder withConfig(@NonNull ConfigSource config) {
+  TrustManagerBuilder withConfig(ConfigSource config) {
     appConfig=new ApplicationConfig(config);
 
     return(add(appConfig.getTrustManager()));

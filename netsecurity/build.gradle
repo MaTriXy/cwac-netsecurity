@@ -1,22 +1,20 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    androidTestImplementation "com.android.support.test:rules:1.0.1"
-    implementation "com.android.support:support-annotations:26.1.0"
-    compileOnly "com.squareup.okhttp3:okhttp:3.9.0"
-    androidTestImplementation "com.squareup.okhttp3:okhttp:3.9.0"
+    androidTestImplementation "com.android.support.test:rules:1.0.2"
+    compileOnly "com.squareup.okhttp3:okhttp:3.9.1"
+    androidTestImplementation "com.squareup.okhttp3:okhttp:3.9.1"
     testImplementation "junit:junit:4.12"
 }
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 26
+        targetSdkVersion 29
         testApplicationId "com.commonsware.cwac.netsecurity.test"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "TEST_PRIVATE_HTTP_URL", '"'+TEST_PRIVATE_HTTP_URL+'"'
         buildConfigField "String", "TEST_PRIVATE_HTTP_REDIR_URL", '"'+TEST_PRIVATE_HTTP_REDIR_URL+'"'
         buildConfigField "String", "TEST_PRIVATE_HTTPS_URL", '"'+TEST_PRIVATE_HTTPS_URL+'"'
@@ -47,20 +45,20 @@ if (project.hasProperty('PUBLISH_GROUP_ID')) {
 
     // based on http://stackoverflow.com/a/23672732/115145
 
-    android.libraryVariants.all { variant ->
-        task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
-            description "Generates Javadoc for $variant.name."
-            source = variant.javaCompile.source
-            ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-            classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
-            exclude '**/BuildConfig.java'
-            exclude '**/R.java'
-            exclude '**/config/*.java'
-            exclude '**/conscrypt/*.java'
-            exclude '**/internalutil/*.java'
-            exclude '**/luni/*.java'
-        }
-    }
+//    android.libraryVariants.all { variant ->
+//        task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
+//            description "Generates Javadoc for $variant.name."
+//            source = variant.javaCompile.source
+//            ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+//            classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+//            exclude '**/BuildConfig.java'
+//            exclude '**/R.java'
+//            exclude '**/config/*.java'
+//           exclude '**/conscrypt/*.java'
+//            exclude '**/internalutil/*.java'
+//            exclude '**/luni/*.java'
+//        }
+//    }
 
     task sourcesJar(type: Jar) {
         from android.sourceSets.main.java.srcDirs
